@@ -1,5 +1,5 @@
 id = "sfapex"
-name = "SFAPEX"
+name = "Salesforce"
 version = "0.1.0"
 authors = ["brianevanmiller"]
 description = "Provides Apex, SOQL and SOSL syntax highlighting for Zed"
