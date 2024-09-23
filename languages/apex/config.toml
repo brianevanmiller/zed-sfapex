@@ -1,6 +1,6 @@
 name = "Apex"
 grammar = "apex"
-path_suffixes = ["cls", "trigger", "apex"]
+path_suffixes = ["cls", "trigger", "apex", "apex-anon"]
 line_comments = ["// "]
 block_comment = ["/* ", " */"]
 autoclose_before = ";:.,=}])>"

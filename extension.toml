@@ -1,19 +1,11 @@
 id = "sfapex"
-name = "Salesforce"
-version = "0.1.0"
+name = "Apex"
+version = "0.0.1"
 authors = ["brianevanmiller"]
-description = "Provides Apex, SOQL and SOSL syntax highlighting for Zed"
+description = "Provides Salesforce Apex syntax highlighting for Zed"
 repository = "https://github.com/brianevanmiller/zed-sfapex"
 schema_version = 1
 
 [grammars.apex]
-repository = "https://github.com/aheber/tree-sitter-sfapex"
-commit = "c99ad4b16d112fea91745e3f1b769754239fdaba"
-
-[grammars.soql]
-repository = "https://github.com/aheber/tree-sitter-sfapex"
-commit = "c99ad4b16d112fea91745e3f1b769754239fdaba"
-
-[grammars.sosl]
 repository = "https://github.com/aheber/tree-sitter-sfapex"
 commit = "c99ad4b16d112fea91745e3f1b769754239fdaba"
