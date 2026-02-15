@@ -8,5 +8,5 @@ schema_version = 1
 
 [grammars.apex]
 repository = "https://github.com/aheber/tree-sitter-sfapex"
-commit = "c99ad4b16d112fea91745e3f1b769754239fdaba"
+rev = "3597575a429766dd7ecce9f5bb97f6fec4419d5d"
 path = "apex"

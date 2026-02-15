@@ -10,7 +10,6 @@
   (trigger_body)                      ; { ... } of `trigger X`
   (block)                             ; { ... } that's not mentioned in this scope
   (switch_block)                      ; { ... } in `switch X`
-  (list_initializer)                  ; new List<Integer>{1, 2}
   (argument_list)                     ; foo(...)
   (formal_parameters)                 ; method foo(...)
   (annotation_argument_list)          ; @Annotation(...)

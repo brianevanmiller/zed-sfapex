@@ -1,4 +1,5 @@
-;; attempting to match concepts represented here:
+;; Apex syntax highlighting
+;; Based on tree-sitter-sfapex v2.4.1 highlights
 ;; https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
 
 [
@@ -40,7 +41,7 @@
 
 ;; Types
 
-;; because itendifying it when declared doesn't carry to use
+;; because identifying it when declared doesn't carry to use
 ;; leans on the convention that "screaming snake case" is a const
 ((identifier) @variable.readonly
   (#match? @variable.readonly "^_*[A-Z][A-Z\\d_]+$"))
@@ -100,14 +101,14 @@
     (formal_parameter
       name: (identifier) @parameter)))
 
-(for_each_statement
+(enhanced_for_statement
   type: (type_identifier) @type
   name: (identifier) @variable )
 
-(for_each_statement
+(enhanced_for_statement
   value: (identifier) @variable)
 
-(for_each_statement
+(enhanced_for_statement
   name: (identifier) @variable)
 
 (object_creation_expression
@@ -118,10 +119,6 @@
 
 (array_type
   element: (type_identifier) @type)
-
-(catch_formal_parameter
-  (type_identifier) @type
-  name: (identifier) @variable)
 
 (return_statement
   (identifier) @variable)
@@ -148,7 +145,7 @@
 
 (assignment_operator) @operator
 
-(update_expression ["++" "--"] @operator)
+(update_operator) @operator
 
 (instanceof_expression
   left: (identifier) @variable
@@ -165,7 +162,7 @@
   (switch_label
     (identifier) @enumMember ))
 
-(switch_label
+(when_sobject_type
   (type_identifier) @type
   (identifier) @variable )
 
@@ -210,7 +207,7 @@
     "~"
   ]) @operator
 
-(map_initializer "=>" @operator)
+("=>" @operator)
 
 [
   (boolean_type)
@@ -233,7 +230,7 @@
 
 [
   (int)
-  (decimal)
+  (decimal_floating_point_literal)
 ] @number
 
 [
@@ -279,6 +276,7 @@
   (static)
   "switch"
   (testMethod)
+  (webservice)
   "throw"
   (transient)
   "try"
@@ -289,12 +287,6 @@
   (with_sharing)
   (without_sharing)
   (inherited_sharing)
-  "insert"
-  "update"
-  "upsert"
-  "delete"
-  "undelete"
-  "merge"
 ] @keyword
 
 (assignment_expression
@@ -309,18 +301,169 @@
 (scoped_type_identifier
   (type_identifier) @type)
 
-;; Apex-specific additions
-(soql_query) @string.special
-(sosl_query) @string.special
+;; ---------------------------------------------------------------------------
+;; SOQL highlights (inline queries parsed by the Apex grammar)
+;; ---------------------------------------------------------------------------
 
-(apex_method_invocation
-  name: (identifier) @method)
+(field_identifier
+  (identifier) @property)
 
-(apex_class_reference
-  name: (identifier) @type)
+(field_identifier
+  (dotted_identifier
+    (identifier) @property))
 
-(database_dml_statement
-  operation: _ @keyword)
+(type_of_clause
+  (identifier) @property)
 
-(system_method_call
-  name: (identifier) @method.defaultLibrary)
+(when_expression
+  (identifier) @type)
+
+(when_expression
+  (field_list
+    (identifier) @property))
+
+(when_expression
+  (field_list
+    (dotted_identifier
+      (identifier) @property )))
+
+(else_expression
+  (field_list
+    (identifier) @property ))
+
+(else_expression
+  (field_list
+    (dotted_identifier
+      (identifier) @property )))
+
+(alias_expression
+  (identifier) @label)
+
+(storage_identifier) @type
+
+(_ function_name:(identifier) @function)
+
+(date_literal) @variable.readonly.defaultLibrary
+
+[
+  "AND"
+  "OR"
+  "NOT"
+  "="
+  "!="
+  "<>"
+  "LIKE"
+  "NOT_IN"
+  "INCLUDES"
+  "EXCLUDES"
+] @operator
+(value_comparison_operator "<" @operator)
+"<=" @operator
+(value_comparison_operator ">" @operator)
+">=" @operator
+(set_comparison_operator "IN" @operator)
+
+(decimal) @number
+(currency_literal) @number
+(date) @variable.readonly
+(date_time) @variable.readonly
+
+[
+  "TRUE"
+  "FALSE"
+  (null_literal)
+] @variable.readonly.defaultLibrary
+
+[
+  "ABOVE"
+  "ABOVE_OR_BELOW"
+  "ALL"
+  "AS"
+  "ASC"
+  "AT"
+  "BELOW"
+  "CUSTOM"
+  "DATA_CATEGORY"
+  "DESC"
+  "ELSE"
+  "END"
+  "FIELDS"
+  "FOR"
+  "FROM"
+  "GROUP_BY"
+  "HAVING"
+  "LIMIT"
+  "NULLS_FIRST"
+  "NULLS_LAST"
+  "OFFSET"
+  "ORDER_BY"
+  "REFERENCE"
+  "SELECT"
+  "STANDARD"
+  "THEN"
+  "TRACKING"
+  "TYPEOF"
+  "UPDATE"
+  "USING"
+  "SCOPE"
+  "LOOKUP"
+  "BIND"
+  "VIEW"
+  "VIEWSTAT"
+  "WITH"
+  "WHERE"
+  "WHEN"
+] @keyword
+
+; Using Scope
+[
+  "delegated"
+  "everything"
+  "mine"
+  "mine_and_my_groups"
+  "my_territory"
+  "my_team_territory"
+  "team"
+] @enumMember
+
+; With
+[
+  "maxDescriptorPerRecord"
+  "RecordVisibilityContext"
+  "Security_Enforced"
+  "supportsDomains"
+  "supportsDelegates"
+  "System_Mode"
+  "User_Mode"
+  "UserId"
+] @enumMember
+
+;; ---------------------------------------------------------------------------
+;; SOSL highlights (inline queries parsed by the Apex grammar)
+;; ---------------------------------------------------------------------------
+
+(find_clause
+          (term) @string )
+
+(sobject_return
+        (identifier) @type )
+
+(with_type (_ "=" @operator))
+
+[
+  "DIVISION"
+  "EMAIL"
+  "FIND"
+  "ListView"
+  "HIGHLIGHT"
+  "METADATA"
+  "NAME"
+  "NETWORK"
+  "PHONE"
+  "PricebookId"
+  "RETURNING"
+  "SIDEBAR"
+  "SNIPPET"
+  "SPELL_CORRECTION"
+  "target_length"
+] @keyword

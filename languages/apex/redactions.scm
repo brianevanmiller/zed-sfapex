@@ -1,11 +1,11 @@
 ; Redactions for Salesforce Apex
 
 ; Redact number literals
-(integer) @redact
-(decimal) @redact
+(int) @redact
+(decimal_floating_point_literal) @redact
 
 ; Redact string literals
-(string) @redact
+(string_literal) @redact
 
 ; Redact sensitive variables (e.g., passwords, tokens)
 (variable_declarator
@@ -17,16 +17,14 @@
 (method_invocation
   name: (identifier) @_method
   (#match? @_method "(authenticate|login|getToken)")
-  arguments: (arguments (_) @redact))
+  arguments: (argument_list (_) @redact))
 
-; Redact sensitive class members
-(class_body_declaration
-  (field_declaration
-    type: (_)
-    declarator: (variable_declarator
-      name: (identifier) @_field
-      (#match? @_field "(apiKey|clientSecret|accessToken)")
-      value: (_) @redact)))
+; Redact sensitive field declarations
+(field_declaration
+  declarator: (variable_declarator
+    name: (identifier) @_field
+    (#match? @_field "(apiKey|clientSecret|accessToken)")
+    value: (_) @redact))
 
 ; Redact sensitive annotations
 (annotation
