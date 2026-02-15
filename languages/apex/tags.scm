@@ -13,10 +13,11 @@
 (method_declaration
   name: (identifier) @name) @definition.method
 
-(implements_list
-  (type_identifier) @name) @reference.implementation
+(interfaces
+  (type_list
+    (type_identifier) @name)) @reference.implementation
 
-(variable_declaration
+(local_variable_declaration
   type: (type_identifier) @name) @reference.class
 
 (object_creation_expression
@@ -24,6 +25,3 @@
 
 (trigger_declaration
   name: (identifier) @name) @definition.trigger
-
-(property_declaration
-  name: (identifier) @name) @definition.property

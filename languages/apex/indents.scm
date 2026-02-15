@@ -10,8 +10,6 @@
   (trigger_body)                      ; { ... } of `trigger X`
   (block)                             ; { ... } that's not mentioned in this scope
   (switch_block)                      ; { ... } in `switch X`
-  (list_initializer)                  ; new List<Integer>{1, 2}
-  (set_initializer)                   ; new Set<String>{'a', 'b'}
   (map_initializer)                   ; new Map<String, Integer>{'key' => 1}
   (argument_list)                     ; foo(...)
   (formal_parameters)                 ; method foo(...)

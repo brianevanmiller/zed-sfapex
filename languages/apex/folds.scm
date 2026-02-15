@@ -9,7 +9,7 @@
   (if_statement)
   (for_statement)
   (while_statement)
-  (do_while_statement)
+  (do_statement)
   (try_statement)
   (catch_clause)
   (finally_clause)
