@@ -1,6 +1,6 @@
 id = "apex"
 name = "Apex"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["brianevanmiller"]
 description = "Provides Salesforce Apex syntax highlighting for Zed"
 repository = "https://github.com/brianevanmiller/zed-sfapex"
