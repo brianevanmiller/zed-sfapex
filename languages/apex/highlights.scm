@@ -1,6 +1,6 @@
 ;; Apex syntax highlighting
 ;; Based on tree-sitter-sfapex v2.4.1 highlights
-;; https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide
+;; Capture names follow Zed conventions
 
 [
   "["
@@ -14,15 +14,15 @@
 ;; Methods
 
 (method_declaration
-  name: (identifier) @method)
+  name: (identifier) @function.method)
 (method_declaration
   type: (type_identifier) @type)
 
 (method_invocation
-  name: (identifier) @method)
+  name: (identifier) @function.method)
 (argument_list
   (identifier) @variable)
-(super) @function.defaultLibrary
+(super) @function.builtin
 
 (explicit_constructor_invocation
   arguments: (argument_list
@@ -31,7 +31,7 @@
 ;; Annotations
 
 (annotation
-  name: (identifier) @decorator)
+  name: (identifier) @attribute)
 
 "@" @operator
 
@@ -43,23 +43,23 @@
 
 ;; because identifying it when declared doesn't carry to use
 ;; leans on the convention that "screaming snake case" is a const
-((identifier) @variable.readonly
-  (#match? @variable.readonly "^_*[A-Z][A-Z\\d_]+$"))
+((identifier) @constant
+  (#match? @constant "^_*[A-Z][A-Z\\d_]+$"))
 
 (interface_declaration
-  name: (identifier) @interface)
+  name: (identifier) @type)
 (class_declaration
-  name: (identifier) @class)
+  name: (identifier) @type)
 (class_declaration
-  (superclass) @class)
+  (superclass) @type)
 (enum_declaration
   name: (identifier) @enum)
 (enum_constant
-  name: (identifier) @enumMember)
+  name: (identifier) @constant)
 
 (interfaces
   (type_list
-    (type_identifier) @interface ))
+    (type_identifier) @type ))
 
 (local_variable_declaration
   (type_identifier) @type )
@@ -99,7 +99,7 @@
 (method_declaration
   (formal_parameters
     (formal_parameter
-      name: (identifier) @parameter)))
+      name: (identifier) @variable.parameter)))
 
 (enhanced_for_statement
   type: (type_identifier) @type
@@ -136,9 +136,9 @@
     (identifier) @variable))
 
 (constructor_declaration
-  name: (identifier) @class)
+  name: (identifier) @constructor)
 
-(dml_type) @function.defaultLibrary
+(dml_type) @function.builtin
 
 (bound_apex_expression
   (identifier) @variable)
@@ -160,7 +160,7 @@
 
 (switch_rule
   (switch_label
-    (identifier) @enumMember ))
+    (identifier) @constant ))
 
 (when_sobject_type
   (type_identifier) @type
@@ -212,7 +212,7 @@
 [
   (boolean_type)
   (void_type)
-] @type.defaultLibrary
+] @type.builtin
 
 ; Variables
 
@@ -222,9 +222,9 @@
 (field_declaration
   (modifiers (modifier [(final) (static)])(modifier [(final) (static)]))
   (variable_declarator
-    name: (identifier) @variable.readonly))
+    name: (identifier) @constant))
 
-(this) @variable.defaultLibrary
+(this) @variable.builtin
 
 ; Literals
 
@@ -295,7 +295,7 @@
 ;; I don't love this but couldn't break them up right now
 ;; can't figure out how to let that be special without conflicting
 ;; in the grammar
-"System.runAs" @method.defaultLibrary
+"System.runAs" @function.builtin
 
 (scoped_type_identifier
   (type_identifier) @type)
@@ -342,36 +342,29 @@
 
 (_ function_name:(identifier) @function)
 
-(date_literal) @variable.readonly.defaultLibrary
+(date_literal) @constant.builtin
 
+; SOQL logical operators (these tokens only exist within SOQL query nodes)
 [
   "AND"
   "OR"
   "NOT"
-  "="
-  "!="
-  "<>"
-  "LIKE"
-  "NOT_IN"
-  "INCLUDES"
-  "EXCLUDES"
 ] @operator
-(value_comparison_operator "<" @operator)
-"<=" @operator
-(value_comparison_operator ">" @operator)
-">=" @operator
-(set_comparison_operator "IN" @operator)
+
+; SOQL comparison operators (scoped to SOQL-specific node types)
+(value_comparison_operator) @operator
+(set_comparison_operator) @operator
 
 (decimal) @number
 (currency_literal) @number
-(date) @variable.readonly
-(date_time) @variable.readonly
+(date) @constant
+(date_time) @constant
 
 [
   "TRUE"
   "FALSE"
   (null_literal)
-] @variable.readonly.defaultLibrary
+] @constant.builtin
 
 [
   "ABOVE"
@@ -423,7 +416,7 @@
   "my_territory"
   "my_team_territory"
   "team"
-] @enumMember
+] @constant
 
 ; With
 [
@@ -435,7 +428,7 @@
   "System_Mode"
   "User_Mode"
   "UserId"
-] @enumMember
+] @constant
 
 ;; ---------------------------------------------------------------------------
 ;; SOSL highlights (inline queries parsed by the Apex grammar)
